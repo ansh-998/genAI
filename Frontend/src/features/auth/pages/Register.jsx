@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate, Link } from 'react-router'
-import "../auth.form.scss"   // ✅ Fixed: was missing scss import
+import "../auth.form.scss"   
 import { useAuth } from '../hooks/useAuth'
 
 const Register = () => {
@@ -10,7 +10,7 @@ const Register = () => {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
 
-    const { user, loading, handleRegister, error } = useAuth()  // ✅ Added: get error from useAuth
+    const { user, loading, handleRegister, error } = useAuth()  // get error from useAuth
 
     //  Redirect if already logged in
     useEffect(() => {

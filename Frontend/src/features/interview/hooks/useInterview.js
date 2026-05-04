@@ -14,7 +14,7 @@ export const useInterview = () => {
     }
 
     const { loading, setLoading, report, setReport, reports, setReports } = context
-    const [error, setError] = useState(null)  // ✅ Added: error state
+    const [error, setError] = useState(null)  // error state
 
 
     const generateReport = async ({ jobDescription, selfDescription, resumeFile }) => {
@@ -23,9 +23,9 @@ export const useInterview = () => {
         try {
             const response = await generateInterviewReport({ jobDescription, selfDescription, resumeFile })
             setReport(response.interviewReport)
-            return response.interviewReport  // ✅ Fixed: return inside try, not after
+            return response.interviewReport  // return inside try, not after
         } catch (error) {
-            setError(error.message || "Failed to generate interview report.")  // ✅ Fixed: handle error
+            setError(error.message || "Failed to generate interview report.")  // handle error
             return null
         } finally {
             setLoading(false)
@@ -38,9 +38,9 @@ export const useInterview = () => {
         try {
             const response = await getInterviewReportById(interviewId)
             setReport(response.interviewReport)
-            return response.interviewReport  // ✅ Fixed: return inside try
+            return response.interviewReport  // return inside try
         } catch (error) {
-            setError(error.message || "Failed to fetch interview report.")  // ✅ Fixed: handle error
+            setError(error.message || "Failed to fetch interview report.")  //  handle error
             return null
         } finally {
             setLoading(false)
@@ -53,9 +53,9 @@ export const useInterview = () => {
         try {
             const response = await getAllInterviewReports()
             setReports(response.interviewReports)
-            return response.interviewReports  // ✅ Fixed: return inside try
+            return response.interviewReports  // return inside try
         } catch (error) {
-            setError(error.message || "Failed to fetch interview reports.")  // ✅ Fixed: handle error
+            setError(error.message || "Failed to fetch interview reports.")  // handle error
             return null
         } finally {
             setLoading(false)
@@ -68,7 +68,7 @@ export const useInterview = () => {
         try {
             const response = await generateResumePdf({ interviewReportId })
 
-            // ✅ Fixed: response is already a blob from the API, create object URL correctly
+            // response is already a blob from the API, create object URL correctly
             const url = window.URL.createObjectURL(new Blob([response], { type: "application/pdf" }))
             const link = document.createElement("a")
             link.href = url
@@ -76,12 +76,12 @@ export const useInterview = () => {
             document.body.appendChild(link)
             link.click()
 
-            // ✅ Added: cleanup to avoid memory leaks
+            //  cleanup to avoid memory leaks
             document.body.removeChild(link)
             window.URL.revokeObjectURL(url)
 
         } catch (error) {
-            setError(error.message || "Failed to generate resume PDF.")  // ✅ Fixed: handle error
+            setError(error.message || "Failed to generate resume PDF.")  // handle error
         } finally {
             setLoading(false)
         }
@@ -96,5 +96,5 @@ export const useInterview = () => {
     }, [interviewId])
 
     return { loading, error, report, reports, generateReport, getReportById, getReports, getResumePdf }
-    //        ✅ Added: error returned so pages can display it
+    //      error returned so pages can display it
 }
