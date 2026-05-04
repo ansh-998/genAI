@@ -4,17 +4,26 @@ const cors = require("cors")
 
 const app = express()
 
+app.set("trust proxy", 1)
+
 app.use(express.json())
 app.use(cookieParser())
 
 const allowedOrigins = [
     "http://localhost:5173",
     "http://localhost:5174",
-    process.env.FRONTEND_URL
+    process.env.FRONTEND_URL,
+    process.env.FRONTEND_URL?.replace(/\/$/, "")
 ].filter(Boolean)
 
 app.use(cors({
-    origin: allowedOrigins,
+    origin: (origin, callback) => {
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true)
+        } else {
+            callback(new Error("Not allowed by CORS"))
+        }
+    },
     credentials: true
 }))
 
