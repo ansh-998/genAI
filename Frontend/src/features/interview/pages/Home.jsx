@@ -98,7 +98,7 @@ const Home = () => {
                         <textarea
                             onChange={(e) => {
                                 setJobDescription(e.target.value)
-                                setCharCount(e.target.value.length)  // ✅ Fixed: update char count
+                                setCharCount(e.target.value.length)  //Fixed: update char count
                             }}
                             className='panel__textarea'
                             placeholder={`Paste the full job description here...\ne.g. 'Senior Frontend Engineer at Google requires proficiency in React, TypeScript, and large-scale system design...'`}
