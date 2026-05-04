@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { useNavigate, Link } from 'react-router'
+import { useNavigate, Link, useLocation } from 'react-router'
 import "../auth.form.scss"
 import { useAuth } from '../hooks/useAuth'
 
@@ -7,9 +7,19 @@ const Login = () => {
 
     const { user, loading, handleLogin, error } = useAuth()
     const navigate = useNavigate()
+    const location = useLocation()
 
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
+    const [successMessage, setSuccessMessage] = useState("")
+
+    useEffect(() => {
+        if (location.state?.message) {
+            setSuccessMessage(location.state.message)
+            // Clear the state so the message doesn't persist on refresh
+            window.history.replaceState({}, document.title)
+        }
+    }, [location])
 
     //  Redirect if already logged in
     useEffect(() => {
@@ -36,6 +46,9 @@ const Login = () => {
         <main>
             <div className="form-container">
                 <h1>Login</h1>
+
+                {/* show success message (e.g. after logout) */}
+                {successMessage && <p className="success-message" style={{ color: '#4ade80', marginBottom: '1rem', textAlign: 'center' }}>{successMessage}</p>}
 
                 {/* show error message to user if login fails */}
                 {error && <p className="error-message">{error}</p>}
