@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useNavigate, Link } from 'react-router'
 import "../auth.form.scss"   // ✅ Fixed: was missing scss import
 import { useAuth } from '../hooks/useAuth'
@@ -10,15 +10,22 @@ const Register = () => {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
 
-    const { loading, handleRegister, error } = useAuth()  // ✅ Added: get error from useAuth
+    const { user, loading, handleRegister, error } = useAuth()  // ✅ Added: get error from useAuth
+
+    //  Redirect if already logged in
+    useEffect(() => {
+        if (!loading && user) {
+            navigate('/')
+        }
+    }, [user, loading, navigate])
 
     const handleSubmit = async (e) => {
         e.preventDefault()
-        await handleRegister({ username, email, password })
-
-        // ✅ Fixed: only navigate if no error
-        if (!error) {
+        try {
+            await handleRegister({ username, email, password })
             navigate("/")
+        } catch (err) {
+            // Error is handled in useAuth
         }
     }
 

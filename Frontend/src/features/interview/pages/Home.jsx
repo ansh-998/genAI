@@ -2,14 +2,16 @@ import React, { useState, useRef } from 'react'
 import "../style/home.scss"
 import { useInterview } from '../hooks/useInterview.js'
 import { useNavigate } from 'react-router'
+import { useAuth } from '../../auth/hooks/useAuth.js'
 
 const Home = () => {
 
-    const { loading, generateReport, reports, error } = useInterview()  // ✅ Added: error
+    const { loading, generateReport, reports, error } = useInterview()  //  error
+    const { handleLogout } = useAuth()
     const [jobDescription, setJobDescription] = useState("")
     const [selfDescription, setSelfDescription] = useState("")
-    const [charCount, setCharCount] = useState(0)           // ✅ Added: track char count
-    const [fileName, setFileName] = useState("")            // ✅ Added: show selected file name
+    const [charCount, setCharCount] = useState(0)           // track char count
+    const [fileName, setFileName] = useState("")            // show selected file name
     const resumeInputRef = useRef()
     const navigate = useNavigate()
 
@@ -28,7 +30,7 @@ const Home = () => {
 
         const data = await generateReport({ jobDescription, selfDescription, resumeFile })
 
-        // ✅ Fixed: only navigate if data is returned (was crashing if generateReport failed)
+        // only navigate if data is returned (was crashing if generateReport failed)
         if (data) {
             navigate(`/interview/${data._id}`)
         }
@@ -47,11 +49,14 @@ const Home = () => {
 
             {/* Page Header */}
             <header className='page-header'>
-                <h1>Create Your Custom <span className='highlight'>Interview Plan</span></h1>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
+                    <h1>Create Your Custom <span className='highlight'>Interview Plan</span></h1>
+                    <button onClick={handleLogout} className='button primary-button' style={{ padding: '0.6rem 1.2rem', fontSize: '0.9rem', width: 'auto' }}>Logout</button>
+                </div>
                 <p>Let our AI analyze the job requirements and your unique profile to build a winning strategy.</p>
             </header>
 
-            {/* ✅ Added: show error message if report generation fails */}
+            {/*  show error message if report generation fails */}
             {error && <p className="error-message">{error}</p>}
 
             {/* Main Card */}
@@ -76,7 +81,7 @@ const Home = () => {
                             placeholder={`Paste the full job description here...\ne.g. 'Senior Frontend Engineer at Google requires proficiency in React, TypeScript, and large-scale system design...'`}
                             maxLength={5000}
                         />
-                        {/* ✅ Fixed: now shows real char count */}
+                        {/*  now shows real char count */}
                         <div className='char-counter'>{charCount} / 5000 chars</div>
                     </div>
 
@@ -148,7 +153,7 @@ const Home = () => {
                     <button
                         onClick={handleGenerateReport}
                         className='generate-btn'
-                        disabled={loading}  // ✅ Added: disable button while loading
+                        disabled={loading}  //  disable button while loading
                     >
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z" /></svg>
                         Generate My Interview Strategy
@@ -157,7 +162,7 @@ const Home = () => {
             </div>
 
             {/* Recent Reports List */}
-            {reports && reports.length > 0 && (  // ✅ Fixed: guard against reports being null/undefined
+            {reports && reports.length > 0 && (  // guard against reports being null/undefined
                 <section className='recent-reports'>
                     <h2>My Recent Interview Plans</h2>
                     <ul className='reports-list'>

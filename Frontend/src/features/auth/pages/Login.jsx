@@ -1,23 +1,30 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useNavigate, Link } from 'react-router'
 import "../auth.form.scss"
 import { useAuth } from '../hooks/useAuth'
 
 const Login = () => {
 
-    const { loading, handleLogin, error } = useAuth()  // ✅ Added: get error from useAuth
+    const { user, loading, handleLogin, error } = useAuth()
     const navigate = useNavigate()
 
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
 
+    //  Redirect if already logged in
+    useEffect(() => {
+        if (!loading && user) {
+            navigate('/')
+        }
+    }, [user, loading, navigate])
+
     const handleSubmit = async (e) => {
         e.preventDefault()
-        await handleLogin({ email, password })
-
-        // ✅ Fixed: only navigate if no error — check error after await
-        if (!error) {
+        try {
+            await handleLogin({ email, password })
             navigate('/')
+        } catch (err) {
+            // Error is handled in useAuth and exposed via 'error'
         }
     }
 
@@ -30,7 +37,7 @@ const Login = () => {
             <div className="form-container">
                 <h1>Login</h1>
 
-                {/* ✅ Added: show error message to user if login fails */}
+                {/* show error message to user if login fails */}
                 {error && <p className="error-message">{error}</p>}
 
                 <form onSubmit={handleSubmit}>

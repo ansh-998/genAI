@@ -1,6 +1,6 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import { AuthContext } from "../auth.context";
-import { login, register, logout, getMe } from "../services/auth.api";
+import { login, register, logout } from "../services/auth.api";
 
 export const useAuth = () => {
 
@@ -15,8 +15,10 @@ export const useAuth = () => {
         try {
             const data = await login({ email, password })
             setUser(data.user)
+            return data.user
         } catch (err) {
             setError(err.message || "Login failed. Please try again.")
+            throw err
         } finally {
             setLoading(false)
         }
@@ -28,8 +30,10 @@ export const useAuth = () => {
         try {
             const data = await register({ username, email, password })
             setUser(data.user)
+            return data.user
         } catch (err) {
             setError(err.message || "Registration failed. Please try again.")
+            throw err
         } finally {
             setLoading(false)
         }
@@ -48,21 +52,6 @@ export const useAuth = () => {
         }
     }
 
-    // Runs on mount — checks if user is already logged in via cookie
-    useEffect(() => {
-        const getAndSetUser = async () => {
-            try {
-                const data = await getMe()
-                setUser(data.user)
-            } catch (err) {
-                setUser(null) // token invalid/expired — treat as logged out
-            } finally {
-                setLoading(false) // ✅ MUST run — releases the loading lock in Protected
-            }
-        }
-
-        getAndSetUser()
-    }, [])
 
     return { user, loading, error, handleRegister, handleLogin, handleLogout }
 }
