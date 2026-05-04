@@ -12,16 +12,23 @@ app.use(cookieParser())
 const allowedOrigins = [
     "http://localhost:5173",
     "http://localhost:5174",
+    "http://localhost:3000",
+    "http://127.0.0.1:5173",
+    "http://127.0.0.1:5174",
     process.env.FRONTEND_URL,
     process.env.FRONTEND_URL?.replace(/\/$/, "")
 ].filter(Boolean)
 
 app.use(cors({
     origin: (origin, callback) => {
-        if (!origin || allowedOrigins.includes(origin)) {
-            callback(null, true)
+        // Allow requests with no origin (like mobile apps or curl requests)
+        if (!origin) return callback(null, true);
+        
+        if (allowedOrigins.includes(origin)) {
+            callback(null, true);
         } else {
-            callback(new Error("Not allowed by CORS"))
+            console.error(`CORS Error: Origin ${origin} is not allowed. Allowed origins:`, allowedOrigins);
+            callback(new Error("Not allowed by CORS"));
         }
     },
     credentials: true
