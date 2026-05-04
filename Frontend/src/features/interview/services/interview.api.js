@@ -1,11 +1,11 @@
 import axios from "axios";
 
 const api = axios.create({
-    baseURL: "http://localhost:3000",
+    baseURL: import.meta.env.VITE_API_URL || "http://localhost:3000",
     withCredentials: true,
 })
 
-// ✅ Added: response interceptor to extract error messages from backend
+// response interceptor to extract error messages from backend
 // Without this, axios throws generic "Request failed with status code 4xx"
 // With this, it throws the actual message from your backend e.g. "Invalid email or password"
 api.interceptors.response.use(
@@ -26,12 +26,12 @@ export const generateInterviewReport = async ({ jobDescription, selfDescription,
     formData.append("jobDescription", jobDescription)
     formData.append("selfDescription", selfDescription)
 
-    // ✅ Added: only append resume if it exists (it's optional if selfDescription is provided)
+    // only append resume if it exists (it's optional if selfDescription is provided)
     if (resumeFile) {
         formData.append("resume", resumeFile)
     }
 
-    // ✅ Note: don't manually set Content-Type for FormData
+    //  don't manually set Content-Type for FormData
     // axios sets it automatically with the correct boundary value
     const response = await api.post("/api/interview/", formData)
 
@@ -62,7 +62,7 @@ export const getAllInterviewReports = async () => {
  */
 export const generateResumePdf = async ({ interviewReportId }) => {
     const response = await api.post(`/api/interview/resume/pdf/${interviewReportId}`, null, {
-        responseType: "arraybuffer"  // ✅ Fixed: use arraybuffer instead of blob
+        responseType: "arraybuffer"  // use arraybuffer instead of blob
         // arraybuffer works more reliably across browsers for binary data
         // and is correctly handled by new Blob([response]) in useInterview.js
     })
