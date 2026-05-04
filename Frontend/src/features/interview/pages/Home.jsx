@@ -18,11 +18,13 @@ const Home = () => {
     const handleGenerateReport = async () => {
         const resumeFile = resumeInputRef.current.files[0]
 
-        //  basic validation before calling API
-        if (!jobDescription.trim()) {
-            alert("Please enter a job description.")
+        // Updated validation: At least one of jobDescription or selfDescription is required
+        if (!jobDescription.trim() && !selfDescription.trim()) {
+            alert("Please provide at least a job description or a self description.")
             return
         }
+
+        // Must have candidate info (Resume or Self-Description)
         if (!resumeFile && !selfDescription.trim()) {
             alert("Please upload a resume or enter a self description.")
             return
@@ -93,7 +95,6 @@ const Home = () => {
                                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2" /><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" /></svg>
                             </span>
                             <h2>Target Job Description</h2>
-                            <span className='badge badge--required'>Required</span>
                         </div>
                         <textarea
                             onChange={(e) => {
@@ -165,7 +166,7 @@ const Home = () => {
                             <span className='info-box__icon'>
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10" /><line x1="12" y1="8" x2="12" y2="12" stroke="#1a1f27" strokeWidth="2" /><line x1="12" y1="16" x2="12.01" y2="16" stroke="#1a1f27" strokeWidth="2" /></svg>
                             </span>
-                            <p>Either a <strong>Resume</strong> or a <strong>Self Description</strong> is required to generate a personalized plan.</p>
+                            <p>Provide a <strong>Job Description</strong> and your <strong>Profile</strong> (Resume or Self Description) for the best results.</p>
                         </div>
                     </div>
                 </div>

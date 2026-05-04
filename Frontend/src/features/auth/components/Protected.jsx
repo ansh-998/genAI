@@ -7,9 +7,7 @@ const Protected = ({children}) => {
 
 
     if(loading){
-        return (<main style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', backgroundColor: '#0d1117', color: '#e6edf3' }}>
-            <h1>{user ? "Logging out..." : "Loading..."}</h1>
-        </main>)
+        return (<main><h1>Loading...</h1></main>)
     }
 
     if(!user){

@@ -74,7 +74,7 @@
 - `GET /get-me`: Get profile of currently logged-in user.
 
 ### **Interview Routes (`/api/interview`)**
-- `POST /`: Generate a new report (Requires PDF upload).
+- `POST /`: Generate a new report. Requires at least one of `jobDescription` or `selfDescription`, and at least one of `resume` or `selfDescription`. `resume` is an optional PDF upload.
 - `GET /`: List all reports for the logged-in user (summarized).
 - `GET /report/:interviewId`: Fetch full details of a specific report.
 - `POST /resume/pdf/:interviewReportId`: Generate and download the tailored resume PDF.

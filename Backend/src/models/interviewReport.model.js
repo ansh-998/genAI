@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 /**
  * job description schema : string
  * resume text : string
@@ -26,6 +26,7 @@ const mongoose = require('mongoose');
  *     tasks: [string]
  * }]   
  */
+
 
 const technicalQuestionSchema = new mongoose.Schema({
     question: {
