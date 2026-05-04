@@ -50,7 +50,7 @@ const Home = () => {
             {/* Top Navigation / Actions */}
             <div style={{ position: 'absolute', top: '1.5rem', right: '1.5rem', display: 'flex', gap: '1rem' }}>
                 <a
-                    href="https://github.com/ansh-998/genAI"
+                    href="https://github.com/ansh-998"
                     target="_blank"
                     rel="noopener noreferrer"
                     className='button'
